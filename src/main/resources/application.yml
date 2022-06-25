@@ -1,0 +1,35 @@
+server:
+  #端口号
+  port: 8848
+  servlet:
+    context-path: /optimus
+#数据库配置信息
+spring:
+  datasource:
+    name: test  #数据库名
+    url: jdbc:mysql://localhost:3306/test #url
+    username: root  #用户名
+   # password: admin  #密码
+    driver-class-name: com.mysql.jdbc.Driver  #数据库链接驱动
+  #redis配置
+  redis:
+    database: 0
+    host: 8.131.91.253
+    port: 6379
+    password: dyd.521
+    timeout: 6000ms
+    pool:
+      # 最大可用连接数（默认为8，负数表示无限）
+      max-active: 8
+      # 最大空闲连接数（默认为8，负数表示无限）
+      max-idle: 8
+      # 最小空闲连接数（默认为0，该值只有为正数才有用）
+      min-idle: 0
+      # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+      max-wait: -1
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #配置映射文件
+  type-aliases-package: com.optimus.entity #配置实体类
+
+

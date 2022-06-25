@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.optimus.mapper.UserMapper">
+    <sql id="words">user_name,pass_word,nick_name,head_img_url,phone,sex,enabled,pid,parent_id,`type`,status,create_time,update_time,create_by,update_by,extend</sql>
+    <sql id="insertMsg">#{userName},#{passWord},#{nickName},#{headImgUrl},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord},#{passWord}</sql>
+    <insert id="add">
+        insert into user_info (username,password,nick_name,head_img_url,phone,sex,enabled,pid,parent_id,`type`,status,create_time,update_time,create_by,update_by,extend)
+        values (#{userName},#{passWord},#{nickName},#{headImgUrl},#{phone},#{sex},#{enable},#{pid},#{parentId},#{type},#{status},#{createTime},#{updateTime},#{createBy},#{updateBy},#{extend})
+
+    </insert>
+
+    <select id="query" parameterType="String" resultType="com.optimus.dto.results.UserResultDTO">
+        SELECT * FROM user_info WHERE user_name = #{userName} AND pass_word = #{passWord}
+    </select>
+    <select id="paging" resultType="com.optimus.dto.results.UserResultDTO">
+        SELECT * FROM user_info limit #{pageNum},#{pageSize}
+    </select>
+
+
+</mapper>
