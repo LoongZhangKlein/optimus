@@ -1,6 +1,6 @@
 server:
   #端口号
-  port: 8848
+  port: 8849
   servlet:
     context-path: /optimus
 #数据库配置信息
@@ -31,5 +31,16 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml  #配置映射文件
   type-aliases-package: com.optimus.entity #配置实体类
+  configuration:
+    map-underscore-to-camel-case: true
+#分页配置
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+
 
 

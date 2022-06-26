@@ -10,7 +10,12 @@
     </insert>
 
     <select id="query" parameterType="String" resultType="com.optimus.dto.results.UserResultDTO">
-        SELECT * FROM user_info WHERE user_name = #{userName} AND pass_word = #{passWord}
+
+        SELECT * FROM user_info WHERE status=1
+        <if test="userName !=null and passWord !=null">
+            and user_name = #{userName} AND pass_word = #{passWord}
+        </if>
+
     </select>
     <select id="paging" resultType="com.optimus.dto.results.UserResultDTO">
         SELECT * FROM user_info limit #{pageNum},#{pageSize}

@@ -1,6 +1,9 @@
 package com.optimus.service.Impl;
 
 
+import com.github.pagehelper.IPage;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.optimus.dto.params.UserParamsDTO;
 import com.optimus.dto.results.UserResultDTO;
 import com.optimus.enums.GlobalEnum;
@@ -45,18 +48,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResultDTO> paging(int pageNum, int pageSize) {
-        int startPage = 0;
-        if (pageNum < 0) {
-            throw new GlobalException(GlobalEnum.ERROR);
-        } else if (pageNum == 0) {
-            startPage = pageNum;
-            //执行查询语句
-        } else if (pageNum == 1) {
-            startPage = pageNum * pageSize;
-        } else {
-            startPage = (pageNum - 1) * pageSize;
-        }
-        List<UserResultDTO> paging = userMapper.paging(startPage, pageSize);
+
+        PageHelper.startPage(pageNum, pageSize);
+        UserParamsDTO userParamsDTO = new UserParamsDTO();
+        List<UserResultDTO> paging = userMapper.query(userParamsDTO);
         return paging;
     }
 
