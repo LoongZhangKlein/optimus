@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -21,10 +23,9 @@ public class UserController {
     @Resource
     UserService userService;
     @RequestMapping("/login")
-    public R login(@RequestBody UserParamsDTO userParamsDTO) {
-        String login = userService.login(userParamsDTO);
-        if (login == null) {
-            return R.fail();
+    public R login(@RequestBody UserParamsDTO userParamsDTO) { Map<String,Object> login = userService.login(userParamsDTO);
+           if (login == null) {
+                  return R.fail();
         }
         return R.creatR(login, GlobalEnum.SUCCESS);
     }

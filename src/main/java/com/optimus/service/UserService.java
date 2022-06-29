@@ -4,6 +4,7 @@ import com.optimus.dto.params.UserParamsDTO;
 import com.optimus.dto.results.UserResultDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     /**
@@ -11,7 +12,7 @@ public interface UserService {
      * @param userParamsDTO
      * @return
      */
-    String login(UserParamsDTO userParamsDTO);
+    Map <String,Object>login(UserParamsDTO userParamsDTO);
 
     /**
      * 分页

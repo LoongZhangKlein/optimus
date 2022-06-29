@@ -8,9 +8,9 @@
     <if test="currentId !=null">
         select * from area_info where status=0 and parent_id=#{currentId}
     </if>
-    <if test="parentId !=null">
+    <!--<if test="parentId !=null">
         select * from area_info where status=0 and parent_id=#{parentId}
-    </if>
+    </if>-->
 </select>
 
 

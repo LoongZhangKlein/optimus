@@ -15,9 +15,7 @@ import com.optimus.utils.TokenUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
     RedisUtil redisUtil;
 
     @Override
-    public String login(UserParamsDTO userParamsDTO) {
+    public Map<String,Object> login(UserParamsDTO userParamsDTO) {
         if (userParamsDTO == null) {
             throw new GlobalException(GlobalEnum.MSG_NOTFULL);
         }
@@ -40,15 +38,16 @@ public class UserServiceImpl implements UserService {
         }else {
             String token = TokenUtils.token(userParamsDTO.getUserName(), userParamsDTO.getPassWord());
             redisUtil.set("token", token, 60);
-            System.out.println(redisUtil.get("token"));
-            return token;
+            HashMap<String, Object> map = new HashMap<>(10);
+            map.put("token",token);
+            map.put("userMsg",query.get(0));
+            return map;
         }
 
     }
 
     @Override
     public List<UserResultDTO> paging(int pageNum, int pageSize) {
-
         PageHelper.startPage(pageNum, pageSize);
         UserParamsDTO userParamsDTO = new UserParamsDTO();
         List<UserResultDTO> paging = userMapper.query(userParamsDTO);
