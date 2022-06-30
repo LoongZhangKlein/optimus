@@ -9,12 +9,17 @@
 
     </insert>
 
-    <select id="query" parameterType="String" resultType="com.optimus.dto.results.UserResultDTO">
+    <select id="query"  parameterType="com.optimus.dto.params.UserParamsDTO" resultType="com.optimus.dto.results.UserResultDTO">
 
-        SELECT * FROM user_info WHERE status=1
-        <if test="userName !=null and passWord !=null">
+        SELECT * FROM user_info WHERE status=0
+        <if test="userName !=null">
             and user_name = #{userName} AND pass_word = #{passWord}
         </if>
+        <if test="phone !=null">
+            and phone = #{phone} AND pass_word = #{passWord}
+        </if>
+
+
 
     </select>
     <select id="paging" resultType="com.optimus.dto.results.UserResultDTO">

@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
         List<UserResultDTO> query = new ArrayList<>();
         if (StringUtils.isNotEmpty(userParamsDTO.getUserName()) && StringUtils.isNotEmpty(userParamsDTO.getPassWord())) {
             query = userMapper.query(userParamsDTO);
+        }else if (StringUtils.isNotEmpty(userParamsDTO.getPhone()) && StringUtils.isNotEmpty(userParamsDTO.getPassWord())){
+            query = userMapper.query(userParamsDTO);
         }
         if (query == null||query.size()==0) {
             throw new GlobalException(GlobalEnum.ERROR);
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
             String token = TokenUtils.token(userParamsDTO.getUserName(), userParamsDTO.getPassWord());
             redisUtil.set("token", token, 60);
             HashMap<String, Object> map = new HashMap<>(10);
+            System.out.println(token);
             map.put("token",token);
             map.put("userMsg",query.get(0));
             return map;

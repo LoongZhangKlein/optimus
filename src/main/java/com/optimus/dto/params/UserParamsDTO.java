@@ -15,7 +15,7 @@ public class UserParamsDTO implements Serializable {
     private String passWord;
     private String nickName;
     private String headImgUrl;
-    private Integer phone;
+    private String phone;
     private Integer sex;
     private Integer enable;
     private String pid;

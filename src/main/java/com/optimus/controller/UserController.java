@@ -7,10 +7,7 @@ import com.optimus.enums.GlobalEnum;
 import com.optimus.service.UserService;
 import com.optimus.utils.RedisUtil;
 import com.optimus.utils.TokenUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -22,8 +19,9 @@ import java.util.Map;
 public class UserController {
     @Resource
     UserService userService;
-    @RequestMapping("/login")
-    public R login(@RequestBody UserParamsDTO userParamsDTO) { Map<String,Object> login = userService.login(userParamsDTO);
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public R login(@RequestBody UserParamsDTO userParamsDTO) {
+        Map<String,Object> login = userService.login(userParamsDTO);
            if (login == null) {
                   return R.fail();
         }
