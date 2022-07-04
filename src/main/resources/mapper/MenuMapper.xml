@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.optimus.mapper.MenuMapper">
+<select id="query" resultType="com.optimus.dto.results.MenuResultDTO">
+    select * from category_info where status=0
+    <if test="parentId ==null">
+         and parent_id=0
+    </if>
+    <if test="parentId !=null">
+        and parent_id=#{parentId}
+    </if>
+    <!--<if test="parentId !=null">
+        select * from area_info where status=0 and parent_id=#{parentId}
+    </if>-->
+</select>
+    <select id="firstMenu" resultType="com.optimus.dto.results.MenuResultDTO">
+        select * from category_info where status=0 and parent_id=-1
+    </select>
+    <select id="secondMenu" resultType="com.optimus.dto.results.MenuResultDTO">
+        select * from category_info where status=0 and parent_id=#{id}
+    </select>
+
+</mapper>

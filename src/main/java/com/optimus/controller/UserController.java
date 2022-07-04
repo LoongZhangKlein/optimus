@@ -5,12 +5,8 @@ import com.optimus.dto.params.UserParamsDTO;
 import com.optimus.dto.results.UserResultDTO;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.service.UserService;
-import com.optimus.utils.RedisUtil;
-import com.optimus.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

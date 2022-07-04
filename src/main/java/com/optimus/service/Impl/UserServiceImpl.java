@@ -62,11 +62,11 @@ public class UserServiceImpl implements UserService {
         if (userParamsDTO == null) {
             throw new GlobalException(GlobalEnum.MSG_NOTFULL);
         }
-        if (StringUtils.isEmpty(userParamsDTO.getUserName()) || StringUtils.isEmpty(userParamsDTO.getPassWord()) || userParamsDTO.getPhone() == null) {
+        if (StringUtils.isEmpty(userParamsDTO.getPhone()) || StringUtils.isEmpty(userParamsDTO.getPassWord()) || userParamsDTO.getPhone() == null) {
             throw new GlobalException(GlobalEnum.MSG_NOTFULL);
         }
         userParamsDTO.setCreateTime(new Date());
-        userParamsDTO.setStatus(1);
+        userParamsDTO.setStatus(0);
         userParamsDTO.setUpdateTime(new Date());
         userParamsDTO.setEnable(1);
         Integer add = userMapper.add(userParamsDTO);
