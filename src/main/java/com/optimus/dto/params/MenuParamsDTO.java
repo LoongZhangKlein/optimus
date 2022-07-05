@@ -11,6 +11,7 @@ public class MenuParamsDTO implements Serializable {
     private Integer id;
     private String parentId;
     private String name;
+    private Integer level;
     private Integer sortOrder;
     private Integer isShow;
     private String image;

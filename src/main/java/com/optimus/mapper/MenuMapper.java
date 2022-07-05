@@ -14,17 +14,6 @@ public interface MenuMapper {
      * @return
      */
     List<MenuResultDTO> query(MenuParamsDTO menuParamsDTO);
-    /**
-     * 查询一级菜单
-     * @param menuParamsDTO
-     * @return
-     */
-    List<MenuResultDTO> firstMenu(MenuParamsDTO menuParamsDTO);
-    /**
-     * 查询多级菜单
-     * @param menuParamsDTO
-     * @return
-     */
-    List<MenuResultDTO> secondMenu(MenuParamsDTO menuParamsDTO);
+
 
 }

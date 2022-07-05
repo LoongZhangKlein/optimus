@@ -1,29 +1,45 @@
 package com.optimus.test;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+@Data
+class User {
+    private String name;
+    private Integer age;
+    private Integer level;
+    private List<User> userList;
+}
 
 public class TestClass {
     public static void main(String[] args) {
-        ArrayList list = new ArrayList();
-        /*list.add("一级菜单");*/
-       /* ArrayList list1 = new ArrayList();
-        list1.add("二级菜单");
-        list.add(list1);*/
-        /*ArrayList list2 = new ArrayList();
-        list2.add("三级菜单");
-        list.add(list2);*/
-        for (int i = 0; i < 2; i++) {
-            list.add("一级菜单");
-            ArrayList list1 = new ArrayList();
-            list1.add("二级菜单");
-            for (int j = 0; j < 2; j++) {
-                ArrayList list2 = new ArrayList();
-                list2.add("三级菜单");
-                list1.add(list2);
-                list.add(list1);
-            }
-        }
-        System.out.println(list.toString());
+        List<User> firstUserList = new ArrayList();
+        User first = new User();
+        first.setName("张三");
+        first.setAge(18);
+        first.setLevel(1);
+
+        // 封装二级菜单
+        List<User> secondUserList = new ArrayList();
+        User second = new User();
+        second.setName("李四");
+        second.setLevel(2);
+        // 封装三级菜单
+        List<User> thirdUserList = new ArrayList();
+        User third = new User();
+        third.setName("王五");
+        third.setLevel(3);
+        // 菜单拼装
+        thirdUserList.add(third);
+        second.setUserList(thirdUserList);
+        secondUserList.add(second);
+        first.setUserList(secondUserList);
+        firstUserList.add(first);
+
+        System.out.println(firstUserList.toString());
+
     }
 }

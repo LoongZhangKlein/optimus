@@ -19,4 +19,10 @@ public interface MenuService {
      * @return
      */
     List<MenuResultDTO> queryCategory(MenuParamsDTO menuParamsDTO);
+    /**
+     * 分类页面菜单查询
+     * @param menuParamsDTO
+     * @return
+     */
+    List<MenuResultDTO> queryMenu(MenuParamsDTO menuParamsDTO);
 }

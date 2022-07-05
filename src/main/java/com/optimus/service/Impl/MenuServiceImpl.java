@@ -3,18 +3,16 @@ package com.optimus.service.Impl;
 
 import com.optimus.dto.params.MenuParamsDTO;
 import com.optimus.dto.results.MenuResultDTO;
-import com.optimus.dto.results.SecondMenuDTO;
-import com.optimus.dto.results.ThirdResultDTO;
 import com.optimus.mapper.MenuMapper;
 import com.optimus.service.MenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
+@Slf4j
 public class MenuServiceImpl implements MenuService {
     @Resource
     MenuMapper menuMapper;
@@ -33,6 +31,11 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuResultDTO> queryCategory(MenuParamsDTO menuParamsDTO) {
+        return null;
+    }
+
+    /*@Override
+    public List<MenuResultDTO> queryCategory(MenuParamsDTO menuParamsDTO) {
         // 总菜单
         List<MenuResultDTO> allMenuList = new ArrayList();
         // 一级菜单查询结果
@@ -41,22 +44,19 @@ public class MenuServiceImpl implements MenuService {
         Iterator<MenuResultDTO> iteratorFirst = menuResultDTOS.iterator();
 
         while (iteratorFirst.hasNext()) {
-            // 单个一级菜单
+            // 一级菜单
             MenuResultDTO firstMenu = iteratorFirst.next();
             // 封装查询入参
             menuParamsDTO.setId(firstMenu.getId());
             // 二级菜单查询结果
             List<MenuResultDTO> secondMenu = menuMapper.secondMenu(menuParamsDTO);
             Iterator<MenuResultDTO> iteratorSecond = secondMenu.iterator();
-            /*SecondMenuDTO secondMenuDTO = new SecondMenuDTO();*/
             List<SecondMenuDTO> secondMenuDTOList = new ArrayList();
             while (iteratorSecond.hasNext()) {
                 // 封装二级菜单
                 SecondMenuDTO secondMenuDTO = new SecondMenuDTO();
                 MenuResultDTO menuResSecond = iteratorSecond.next();
                 secondMenuDTO.setName(menuResSecond.getName());
-                /*secondMenuDTOList.add(secondMenuDTO);*/
-                /*firstMenu.setSecondMenuDTO(secondMenuDTO);*/
                 menuParamsDTO.setId(menuResSecond.getId());
                 // 三级菜单查询结果
                 List<MenuResultDTO> thirdMenu = menuMapper.secondMenu(menuParamsDTO);
@@ -67,10 +67,6 @@ public class MenuServiceImpl implements MenuService {
                     ThirdResultDTO thirdResultDTO = new ThirdResultDTO();
                     thirdResultDTO.setName(menuResThird.getName());
                     thirdResultDTOList.add(thirdResultDTO);
-
-                    /*menuParamsDTO.setId(menuResThird.getId());*/
-
-                    /*List<MenuResultDTO> thirdMenuRes = menuMapper.secondMenu(menuParamsDTO);
                     Iterator<MenuResultDTO> iterator = thirdMenuRes.iterator();
                     while (iterator.hasNext()) {
                         MenuResultDTO next = iterator.next();
@@ -78,7 +74,7 @@ public class MenuServiceImpl implements MenuService {
                         thirdResultDTO.setName(next.getName());
                         thirdResultDTOList.add(thirdResultDTO);
 
-                    }*/
+                    }
 
                 }
                 secondMenuDTO.setThirdResultDTOList(thirdResultDTOList);
@@ -88,53 +84,82 @@ public class MenuServiceImpl implements MenuService {
             firstMenu.setSecondMenuDTOList(secondMenuDTOList);
             allMenuList.add(firstMenu);
         }
-
-
-
-        /*List<MenuResultDTO> allMenu = new ArrayList();
-        // 查询一级菜单
-        List<MenuResultDTO> topMenu = menuMapper.firstMenu(menuParamsDTO);
-        *//*List<List<List<MenuResultDTO>>> firstMenu = new ArrayList();*//*
-        // 二级菜单
-        *//*Iterator<MenuResultDTO> firstIterator = topMenu.iterator();*//*
-        for (int i = 0; i < topMenu.size(); i++) {
-            MenuResultDTO menuResultFirst=topMenu.get(i);
-            allMenu.add(menuResultFirst);
-            menuParamsDTO.setId(menuResultFirst.getId());
-            List<MenuResultDTO> second = menuMapper.secondMenu(menuParamsDTO);
-            // 三级菜单
-            List<MenuResultDTO>  secondMenu = new ArrayList();
-
-            for (int j = 0; j < second.size(); j++) {
-                List<MenuResultDTO> third = menuMapper.secondMenu(menuParamsDTO);
-                MenuResultDTO menuResultSecond=second.get(j);
-                secondMenu.add( menuResultSecond);
-                allMenu.add(secondMenu.get(i));
-                menuParamsDTO.setId(menuResultSecond.getId());
-                List<List<MenuResultDTO>> thirdMenu = new ArrayList();
-                thirdMenu.add(third);
-                secondMenu.add(thirdMenu.get(i).get(j));
-                allMenu.add(secondMenu.get(i));
-                *//*thirdMenu.addAll(third);*//*
-            }
-        }*/
-        /*while (firstIterator.hasNext()) {
-            MenuResultDTO menuResultFirst=firstIterator.next();
-            menuParamsDTO.setId(menuResultFirst.getId());
-            List<MenuResultDTO> second = menuMapper.secondMenu(menuParamsDTO);
-            secondMenu.addAll(second);
-            // 三级菜单
-            Iterator<MenuResultDTO> secondIterator = second.iterator();
-            while (secondIterator.hasNext()) {
-                MenuResultDTO menuResultThird=secondIterator.next();
-                menuParamsDTO.setId(menuResultThird.getId());
-                List<MenuResultDTO> third = menuMapper.secondMenu(menuParamsDTO);
-                thirdMenu.addAll(third);
-            }
-        }*/
-
         return allMenuList;
+    }*/
+
+    /**
+     * 多级菜单查询
+     * @param menuParamsDTO
+     * @return
+     */
+    @Override
+    public List<MenuResultDTO> queryMenu(MenuParamsDTO menuParamsDTO) {
+        List<MenuResultDTO> allMenuList = menuMapper.query(menuParamsDTO);
+        // 菜单归类
+        Map<Integer, List<MenuResultDTO>> mapMenuList = this.buildMenusLevel(allMenuList);
+        // 菜单拼装
+        Map<Integer, List<MenuResultDTO>> integerListMap = this.buildMultiplyMenu(mapMenuList);
+        List<MenuResultDTO> menuResultDTOS = integerListMap.get(1);
+        return menuResultDTOS;
     }
 
+    /**
+     * 分类整理各级别菜单
+     * @param allMenuList
+     * @return
+     */
+    private Map<Integer, List<MenuResultDTO>> buildMenusLevel(List<MenuResultDTO> allMenuList) {
+        Map<Integer, List<MenuResultDTO>> mapMenuList=new HashMap<>();
+        Iterator<MenuResultDTO> iterator = allMenuList.iterator();
+        List<MenuResultDTO> list = new ArrayList();
+        while (iterator.hasNext()) {
+            MenuResultDTO menuResultDTO = iterator.next();
+            if (!mapMenuList.containsKey(menuResultDTO.getLevel())) {
+                list = new ArrayList<>();
+            }
+            list.add(menuResultDTO);
+            mapMenuList.put(menuResultDTO.getLevel(), list);
+        }
+        return mapMenuList;
+    }
+
+    /**
+     * 多级菜单拼装
+     * @param mapMenuList
+     * @return
+     */
+    private Map<Integer, List<MenuResultDTO>> buildMultiplyMenu(Map<Integer, List<MenuResultDTO>> mapMenuList) {
+        // 多级菜单组装结果
+        Map<Integer, List<MenuResultDTO>> mapMenuListRes = new HashMap();
+        if (mapMenuList.size() > 0) {
+            for (int i = mapMenuList.size(); i >= 1; i--) {
+                // 最后一级菜单上一级
+                List<MenuResultDTO> beforeMenuList = mapMenuList.get(i - 1);
+                if (beforeMenuList != null) {
+                    Iterator<MenuResultDTO> beforeIterator = beforeMenuList.iterator();
+                    while (beforeIterator.hasNext()) {
+                        // 最后一级菜单
+                        MenuResultDTO beforeLevel = beforeIterator.next();
+                        List<MenuResultDTO> sonMenuList = new ArrayList();
+                        // 最后一级菜单集合
+                        List<MenuResultDTO> lastMenuList = mapMenuList.get(i);
+                        Iterator<MenuResultDTO> lastIterator = lastMenuList.iterator();
+                        while (lastIterator.hasNext()) {
+                            MenuResultDTO lastLevel = lastIterator.next();
+                            if (beforeLevel.getId().equals(lastLevel.getParentId())) {
+                                sonMenuList.add(lastLevel);
+                            }
+                        }
+                        beforeLevel.setMenuResultDTOList(sonMenuList);
+                        mapMenuListRes.put(1, beforeMenuList);
+                    }
+                }else{
+                    // 只有一级直接返回
+                    return mapMenuList;
+                }
+            }
+        }
+        return mapMenuListRes;
+    }
 
 }

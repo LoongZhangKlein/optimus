@@ -10,8 +10,9 @@ import java.util.List;
 @Data
 public class MenuResultDTO implements Serializable {
     private Integer id;
-    private String parentId;
+    private Integer parentId;
     private String name;
+    private Integer level;
     private Integer sortOrder;
     private Integer isShow;
     private String image;
@@ -22,4 +23,5 @@ public class MenuResultDTO implements Serializable {
     private BigInteger updateBy;
     private SecondMenuDTO secondMenuDTO;
     private List<SecondMenuDTO> secondMenuDTOList;
+    private List<MenuResultDTO> menuResultDTOList;
 }

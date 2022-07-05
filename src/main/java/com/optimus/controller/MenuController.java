@@ -22,9 +22,9 @@ public class MenuController {
         List<MenuResultDTO> query = menuService.query(menuParamsDTO);
         return R.creatR(query, GlobalEnum.SUCCESS);
     }
-    @RequestMapping("/queryCategory")
+    @RequestMapping("/queryMenu")
     public R queryCategory(@RequestBody(required = false) MenuParamsDTO menuParamsDTO) {
-        List<MenuResultDTO> query = menuService.queryCategory(menuParamsDTO);
+        List<MenuResultDTO> query = menuService.queryMenu(menuParamsDTO);
         return R.creatR(query, GlobalEnum.SUCCESS);
     }
 

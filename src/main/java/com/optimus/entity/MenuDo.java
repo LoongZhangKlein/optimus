@@ -8,8 +8,9 @@ import java.util.Date;
 @Data
 public class MenuDo {
     private Integer id;
-    private String parentId;
+    private Integer parentId;
     private String name;
+    private Integer level;
     private Integer sortOrder;
     private Integer isShow;
     private String image;
