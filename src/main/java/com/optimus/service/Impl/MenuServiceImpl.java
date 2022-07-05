@@ -88,7 +88,7 @@ public class MenuServiceImpl implements MenuService {
     }*/
 
     /**
-     * 多级菜单查询
+     * 多级菜单查询(不可越级开启菜单)
      * @param menuParamsDTO
      * @return
      */
@@ -156,6 +156,8 @@ public class MenuServiceImpl implements MenuService {
                         beforeLevel.setMenuResultDTOList(sonMenuList);
                         mapMenuListRes.put(1, beforeMenuList);
                     }
+                }else{
+                    return mapMenuList;
                 }
             }
         }
