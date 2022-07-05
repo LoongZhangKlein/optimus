@@ -3,6 +3,8 @@ package com.optimus.service.Impl;
 
 import com.optimus.dto.params.MenuParamsDTO;
 import com.optimus.dto.results.MenuResultDTO;
+import com.optimus.enums.GlobalEnum;
+import com.optimus.exception.GlobalException;
 import com.optimus.mapper.MenuMapper;
 import com.optimus.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +98,9 @@ public class MenuServiceImpl implements MenuService {
     public List<MenuResultDTO> queryMenu(MenuParamsDTO menuParamsDTO) {
         long start = System.currentTimeMillis();
         List<MenuResultDTO> allMenuList = menuMapper.query(menuParamsDTO);
+        if (allMenuList==null){
+            throw new GlobalException(GlobalEnum.MSG_NOTFULL);
+        }
         // 菜单归类
         Map<Integer, List<MenuResultDTO>> mapMenuList = this.buildMenusLevel(allMenuList);
         // 菜单拼装
@@ -112,18 +117,26 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     private Map<Integer, List<MenuResultDTO>> buildMenusLevel(List<MenuResultDTO> allMenuList) {
-        Map<Integer, List<MenuResultDTO>> mapMenuList=new HashMap<>();
+        // 存放结果
+        Map<Integer, List<MenuResultDTO>> menuListMap=new HashMap<>(16);
         Iterator<MenuResultDTO> iterator = allMenuList.iterator();
-        List<MenuResultDTO> list = new ArrayList();
         while (iterator.hasNext()) {
             MenuResultDTO menuResultDTO = iterator.next();
-            if (!mapMenuList.containsKey(menuResultDTO.getLevel())) {
+            List<MenuResultDTO> list = menuListMap.get(menuResultDTO.getLevel());
+            // 不存在该级菜单
+            if (list==null) {
                 list = new ArrayList<>();
+                list.add(menuResultDTO);
+                menuListMap.put(menuResultDTO.getLevel(), list);
+                /**/
+            }else{
+                List<MenuResultDTO> menuResultDTOList = menuListMap.get(menuResultDTO.getLevel());
+                menuResultDTOList.add(menuResultDTO);
             }
-            list.add(menuResultDTO);
-            mapMenuList.put(menuResultDTO.getLevel(), list);
+
+            /**/
         }
-        return mapMenuList;
+        return menuListMap;
     }
 
     /**
@@ -133,12 +146,15 @@ public class MenuServiceImpl implements MenuService {
      */
     private Map<Integer, List<MenuResultDTO>> buildMultiplyMenu(Map<Integer, List<MenuResultDTO>> mapMenuList) {
         // 多级菜单组装结果
-        Map<Integer, List<MenuResultDTO>> mapMenuListRes = new HashMap();
-        if (mapMenuList.size() > 0) {
+        Map<Integer, List<MenuResultDTO>> menuListMap = new HashMap();
+        // 判断提前加
+        /*if (mapMenuList.size() > 0) { }*/
             for (int i = mapMenuList.size(); i >= 1; i--) {
                 // 最后一级菜单上一级
                 List<MenuResultDTO> beforeMenuList = mapMenuList.get(i - 1);
-                if (beforeMenuList != null) {
+                if (beforeMenuList == null) {
+                    return mapMenuList;
+                }else{
                     Iterator<MenuResultDTO> beforeIterator = beforeMenuList.iterator();
                     while (beforeIterator.hasNext()) {
                         // 最后一级菜单
@@ -154,14 +170,12 @@ public class MenuServiceImpl implements MenuService {
                             }
                         }
                         beforeLevel.setMenuResultDTOList(sonMenuList);
-                        mapMenuListRes.put(1, beforeMenuList);
+                        menuListMap.put(1, beforeMenuList);
                     }
-                }else{
-                    return mapMenuList;
                 }
             }
-        }
-        return mapMenuListRes;
+
+        return menuListMap;
     }
 
 }
