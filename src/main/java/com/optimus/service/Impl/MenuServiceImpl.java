@@ -94,12 +94,15 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<MenuResultDTO> queryMenu(MenuParamsDTO menuParamsDTO) {
+        long start = System.currentTimeMillis();
         List<MenuResultDTO> allMenuList = menuMapper.query(menuParamsDTO);
         // 菜单归类
         Map<Integer, List<MenuResultDTO>> mapMenuList = this.buildMenusLevel(allMenuList);
         // 菜单拼装
         Map<Integer, List<MenuResultDTO>> integerListMap = this.buildMultiplyMenu(mapMenuList);
         List<MenuResultDTO> menuResultDTOS = integerListMap.get(1);
+        System.out.println("去掉后");
+        System.out.println(System.currentTimeMillis()-start);
         return menuResultDTOS;
     }
 
@@ -153,9 +156,6 @@ public class MenuServiceImpl implements MenuService {
                         beforeLevel.setMenuResultDTOList(sonMenuList);
                         mapMenuListRes.put(1, beforeMenuList);
                     }
-                }else{
-                    // 只有一级直接返回
-                    return mapMenuList;
                 }
             }
         }

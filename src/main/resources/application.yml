@@ -60,7 +60,9 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-
+#日志配置
+#logging:
+#  level: debug
 
 
 
