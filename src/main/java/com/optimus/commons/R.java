@@ -2,6 +2,7 @@ package com.optimus.commons;
 
 
 
+import com.alibaba.fastjson.JSON;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.exception.GlobalException;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class R<T> {
     private String msg;
 
     private T data;
+
+
 
     public T checkAndGet(){
         if (!GlobalEnum.SUCCESS.getCode().equals(this.code)){
@@ -45,6 +48,13 @@ public class R<T> {
         r.data=o;
         return r;
     }
+    public static <T> R creatR(JSON o, GlobalEnum errorEnum){
+        R r=new R();
+        r.code=errorEnum.getCode();
+        r.msg=errorEnum.getMsg();
+        r.data=o;
+        return r;
+    }
     public static <T> R ok(T o){
         R r=new R();
         r.code= GlobalEnum.SUCCESS.getCode();
@@ -57,6 +67,18 @@ public class R<T> {
         R r=new R();
         r.code= GlobalEnum.ERROR.getCode();
         r.msg= GlobalEnum.ERROR.getMsg();
+        return r;
+    }
+    public static <T> R fail(GlobalEnum globalEnum){
+        R r=new R();
+        r.code=globalEnum.getCode();
+        r.msg=globalEnum.getMsg();
+        return r;
+    }
+    public static R fail(String code, String msg) {
+        R r=new R();
+        r.code=code;
+        r.msg=msg;
         return r;
     }
 

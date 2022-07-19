@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.optimus.mapper.ProductMapper">
+    <select id="queryAll" resultType="com.optimus.dto.results.ProductResultDTO">
+        <if test="level ==null and parentId==null">
+            select * from category_info where status=0
+        </if>
+
+
+    </select>
+    <select id="queryPage" resultType="com.optimus.dto.results.ProductResultDTO">
+        <!--<if test="size!=null and page!=null and categoryId !=null">-->
+            select * from product_info where status=0 and category_id=#{productParamsDTO.categoryId} limit #{size},#{pageSize}
+        <!--</if>-->
+    </select>
+    <select id="count" resultType="integer">
+    <if test="categoryId!=null">
+        select count(id) from product_info where status=0 and category_id=#{categoryId}
+    </if>
+    </select>
+    <select id="sort" resultType="com.optimus.dto.results.ProductResultDTO">
+        <if test="salesVolume!=null and categoryId!=null">
+        SELECT * FROM `product_info` where category_id=#{categoryId} limit #{size},#{pageSize} ORDER BY sales_volume=#{salesVolume} DESC
+        </if>
+    </select>
+
+</mapper>

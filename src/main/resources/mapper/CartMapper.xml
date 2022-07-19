@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.optimus.mapper.CartMapper">
+    <sql id="words">
+    (user_id,product_id,name,size,color,price,number,images,status,create_time,update_time,create_by,update_by)
+</sql>
+    <sql id="insertValues">
+        (#{userId},#{productId},#{number},#{status},#{createTime},#{updateTime},#{createBy},#{updateBy})
+    </sql>
+
+    <insert id="add">
+        insert into cart_info
+        <include refid="words"/>
+        values
+        <include refid="insertValues"/>
+    </insert>
+
+    <select id="query" resultType="com.optimus.dto.results.CartResultDTO">
+        select * from cart_info where status=0
+        <if test="productId !=null and name!=null and size !=null
+        and color !=null and price !=null and images!=null ">
+            and product_id=#{productId} and name=#{name} and size=#{size}
+            and color=#{color} and price=#{price}
+        </if>
+    </select>
+
+    <update id="update">
+        <if test="productId !=null and userId !=null">
+            update cart_info set number=number+#{number} WHERE product_id=#{productId} and userId=#{userId}
+        </if>
+    </update>
+</mapper>

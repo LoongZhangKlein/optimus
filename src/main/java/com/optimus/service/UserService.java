@@ -12,7 +12,7 @@ public interface UserService {
      * @param userParamsDTO
      * @return
      */
-    Map <String,Object>login(UserParamsDTO userParamsDTO);
+    Map<String,Object> login(UserParamsDTO userParamsDTO);
 
     /**
      * 分页

@@ -1,5 +1,7 @@
 package com.optimus.controller;
 
+
+import com.alibaba.fastjson.JSONObject;
 import com.optimus.commons.R;
 import com.optimus.dto.params.MenuParamsDTO;
 import com.optimus.dto.results.MenuResultDTO;
@@ -17,15 +19,17 @@ import java.util.List;
 public class MenuController {
     @Resource
     MenuService menuService;
-    @RequestMapping("/query")
-    public R query(@RequestBody(required = false) MenuParamsDTO menuParamsDTO) {
-        List<MenuResultDTO> query = menuService.query(menuParamsDTO);
+    @RequestMapping("/queryIndexMenu")
+    public R queryIndexMenu(@RequestBody(required = false) MenuParamsDTO menuParamsDTO) {
+        List<MenuResultDTO> query = menuService.queryIndexMenu(menuParamsDTO);
         return R.creatR(query, GlobalEnum.SUCCESS);
     }
     @RequestMapping("/queryMenu")
-    public R queryCategory(@RequestBody(required = false) MenuParamsDTO menuParamsDTO) {
+    public R queryMenu(@RequestBody(required = false) MenuParamsDTO menuParamsDTO) {
         List<MenuResultDTO> query = menuService.queryMenu(menuParamsDTO);
-        return R.creatR(query, GlobalEnum.SUCCESS);
+        JSONObject json=new JSONObject();
+        json.put("data",query);
+        return R.creatR(json, GlobalEnum.SUCCESS);
     }
 
 }

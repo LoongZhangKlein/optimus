@@ -15,6 +15,7 @@ public class  UserResultDTO implements Serializable {
     private String nickName;
     private String headImgUrl;
     private String phone;
+    private String token;
     private Integer sex;
     private Integer enable;
     private String pid;

@@ -1,8 +1,6 @@
 package com.optimus.service.Impl;
 
 
-import com.github.pagehelper.IPage;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.optimus.dto.params.UserParamsDTO;
 import com.optimus.dto.results.UserResultDTO;
@@ -14,6 +12,7 @@ import com.optimus.utils.RedisUtil;
 import com.optimus.utils.TokenUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.*;
 
@@ -25,26 +24,30 @@ public class UserServiceImpl implements UserService {
     RedisUtil redisUtil;
 
     @Override
-    public Map<String,Object> login(UserParamsDTO userParamsDTO) {
+    public Map<String, Object> login(UserParamsDTO userParamsDTO) {
         if (userParamsDTO == null) {
-            throw new GlobalException(GlobalEnum.MSG_NOTFULL);
+            throw new GlobalException(GlobalEnum.MSG_NOT_FULL);
         }
         List<UserResultDTO> query = new ArrayList<>();
         if (StringUtils.isNotEmpty(userParamsDTO.getUserName()) && StringUtils.isNotEmpty(userParamsDTO.getPassWord())) {
             query = userMapper.query(userParamsDTO);
-        }else if (StringUtils.isNotEmpty(userParamsDTO.getPhone()) && StringUtils.isNotEmpty(userParamsDTO.getPassWord())){
+        } else if (StringUtils.isNotEmpty(userParamsDTO.getPhone()) && StringUtils.isNotEmpty(userParamsDTO.getPassWord())) {
             query = userMapper.query(userParamsDTO);
         }
-        if (query == null||query.size()==0) {
+        if (query == null || query.size() == 0) {
             throw new GlobalException(GlobalEnum.ERROR);
-        }else {
+        } else {
             String token = TokenUtils.token(userParamsDTO.getUserName(), userParamsDTO.getPassWord());
-            redisUtil.set("token", token, 60);
-            HashMap<String, Object> map = new HashMap<>(10);
-            System.out.println(token);
-            map.put("token",token);
-            map.put("userMsg",query.get(0));
-            return map;
+            query.get(0).setToken(token);
+            // 隐藏用户密码 后期可改为加密
+            query.get(0).setPassWord(null);
+            Map<String, Object> redisMap = new HashMap();
+            redisMap.put(token, userParamsDTO);
+            redisUtil.hmset(token, redisMap, 3600);
+            HashMap<String, Object> userMsgMap = new HashMap<>(2);
+            userMsgMap.put("token", token);
+            userMsgMap.put("userMsg", query.get(0));
+            return userMsgMap;
         }
 
     }
@@ -60,10 +63,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer add(UserParamsDTO userParamsDTO) {
         if (userParamsDTO == null) {
-            throw new GlobalException(GlobalEnum.MSG_NOTFULL);
+            throw new GlobalException(GlobalEnum.MSG_NOT_FULL);
         }
         if (StringUtils.isEmpty(userParamsDTO.getPhone()) || StringUtils.isEmpty(userParamsDTO.getPassWord()) || userParamsDTO.getPhone() == null) {
-            throw new GlobalException(GlobalEnum.MSG_NOTFULL);
+            throw new GlobalException(GlobalEnum.MSG_NOT_FULL);
         }
         userParamsDTO.setCreateTime(new Date());
         userParamsDTO.setStatus(0);

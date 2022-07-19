@@ -21,6 +21,5 @@ public class MenuResultDTO implements Serializable {
     private Date updateTime;
     private BigInteger createBy;
     private BigInteger updateBy;
-    private SecondMenuDTO secondMenuDTO;
     private List<MenuResultDTO> menuResultDTOList;
 }
