@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class UserParamsDTO implements Serializable {
     private String id;
-    private BigInteger userId;
+    private Long userId;
     private String userName;
     private String passWord;
     private String nickName;

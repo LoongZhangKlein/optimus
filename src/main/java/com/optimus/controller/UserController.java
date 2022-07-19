@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-public class UserController extends HttpServlet {
+public class UserController  {
     @Resource
     UserService userService;
     @Resource

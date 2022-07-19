@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
             // 隐藏用户密码 后期可改为加密
             query.get(0).setPassWord(null);
             Map<String, Object> redisMap = new HashMap();
-            redisMap.put(token, userParamsDTO);
+            redisMap.put(token, query.get(0));
+            System.out.println(redisMap);
             redisUtil.hmset(token, redisMap, 3600);
             HashMap<String, Object> userMsgMap = new HashMap<>(2);
             userMsgMap.put("token", token);

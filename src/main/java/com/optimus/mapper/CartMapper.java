@@ -21,6 +21,18 @@ public interface CartMapper {
      * @return
      */
     List<CartResultDTO> query(CartParamsDTO cartParamsDTO);
+    /**
+     * 查找数据
+     * @param cartParamsDTO
+     * @return
+     */
+    List<CartResultDTO> queryPage(Integer size,Integer page,CartParamsDTO cartParamsDTO);
+
+    /**
+     *查找记录
+     * @return
+     */
+    Integer count(CartParamsDTO cartParamsDTO);
 
     /**
      * 更新数据

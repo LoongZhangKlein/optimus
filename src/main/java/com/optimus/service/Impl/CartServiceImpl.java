@@ -2,7 +2,11 @@ package com.optimus.service.Impl;
 
 
 import com.optimus.dto.params.CartParamsDTO;
+import com.optimus.dto.params.PageParamsDTO;
+import com.optimus.dto.params.UserParamsDTO;
 import com.optimus.dto.results.CartResultDTO;
+import com.optimus.dto.results.ProductResultDTO;
+import com.optimus.dto.results.UserResultDTO;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.exception.GlobalException;
 import com.optimus.mapper.CartMapper;
@@ -15,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,15 +27,13 @@ import java.util.Map;
 @Slf4j
 @Service
 public class CartServiceImpl implements CartService {
-    private final int requiredMsg = 6;
+    private final int requiredMsg = 4;
     private final int effectiveStatus = 0;
     private final int error = -1;
     @Resource
     CartMapper cartMapper;
     @Resource
     RedisUtil redisUtil;
-    @Resource
-    HttpServletRequest request;
 
     @Override
     public Integer add(Map<String, String> cartMap) {
@@ -45,8 +46,10 @@ public class CartServiceImpl implements CartService {
         if (CollectionUtils.isEmpty(userMsg)){
             throw new GlobalException(GlobalEnum.NOT_LOG_IN);
         }
+        // 获取用户信息
+        UserResultDTO userMsgDetail = getUserMsg(userMsg, token);
         // 组装DTO
-        CartParamsDTO cartParamsDTO = assemble(cartMap);
+        CartParamsDTO cartParamsDTO = assemble(cartMap,userMsgDetail);
         //判断是否已经加入购物车
         List<CartResultDTO> query = query(cartParamsDTO);
         // 未加入直接加入
@@ -60,6 +63,11 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    /**
+     * 查找购物车是否需要重复添加
+     * @param cartParamsDTO
+     * @return
+     */
     @Override
     public List<CartResultDTO> query(CartParamsDTO cartParamsDTO) {
         if (cartParamsDTO == null) {
@@ -69,6 +77,39 @@ public class CartServiceImpl implements CartService {
         return query;
     }
 
+    /**
+     * 分页查询所有购物车数据
+     * @param pageParamsDTO
+     * @param cartParamsDTO
+     * @return
+     */
+    @Override
+    public PageParamsDTO queryPage(PageParamsDTO pageParamsDTO, CartParamsDTO cartParamsDTO) {
+        Integer curPage= pageParamsDTO.getCurPage();
+        Integer pageSize= pageParamsDTO.getPageSize();
+        if (curPage<1|| curPage==null || pageSize<=0 || pageSize==null){
+            throw new GlobalException(GlobalEnum.MSG_NOT_FULL);
+        }
+        Integer totalCount=null;
+        //查找总记录数
+        if (totalCount==null){
+            totalCount=cartMapper.count(cartParamsDTO);
+        }
+        int totalPages=(totalCount  +  pageSize  - 1) / pageSize;
+        int offset=(curPage-1)*pageSize;
+        List<CartResultDTO> cartResultDTOS = cartMapper.queryPage(offset, pageSize, cartParamsDTO);
+        pageParamsDTO.setCurPage(pageParamsDTO.getCurPage());
+        pageParamsDTO.setList(cartResultDTOS);
+        pageParamsDTO.setTotalCount(totalCount);
+        pageParamsDTO.setTotalPage(totalPages);
+        return pageParamsDTO;
+    }
+
+    /**
+     * 若重复添加相同物品 仅更新数量
+     * @param cartParamsDTO
+     * @return
+     */
     @Override
     public Integer update(CartParamsDTO cartParamsDTO) {
         if (cartParamsDTO == null) {
@@ -79,26 +120,39 @@ public class CartServiceImpl implements CartService {
         return update;
     }
 
-    private Map<String, String> checkLogin(Map<String, String> cartMap) {
-        HttpSession session = request.getSession();
-        Map<String, Object> userMsg = (Map<String, Object>) session.getAttribute("userMsg");
-        cartMap.put("userId", (String) userMsg.get("userId"));
-
-        return cartMap;
+    /**
+     * 获取用户登录信息
+     * @param userMsg
+     * @param token
+     * @return
+     */
+    private UserResultDTO  getUserMsg(Map<Object, Object> userMsg, String token) {
+        UserResultDTO userResultDTO= (UserResultDTO) userMsg.get(token);
+        return userResultDTO;
     }
 
-    private CartParamsDTO assemble(Map<String, String> cartMap) {
+    /**
+     * 组装购物车信息
+     * @param cartMap
+     * @param userMsgDetail
+     * @return
+     */
+    private CartParamsDTO assemble(Map<String, String> cartMap,UserResultDTO userMsgDetail) {
         CartParamsDTO cartParamsDTO = new CartParamsDTO();
         cartParamsDTO.setNumber(Integer.valueOf(cartMap.get("number")));
         cartParamsDTO.setProductId(Long.valueOf(cartMap.get("productId")));
         cartParamsDTO.setColor(cartMap.get("color"));
         cartParamsDTO.setName(cartMap.get("name"));
-        cartParamsDTO.setPrice(Double.valueOf(cartMap.get("price")));
         cartParamsDTO.setSize(cartMap.get("size"));
-        cartParamsDTO.setImages(cartMap.get("images"));
+        cartParamsDTO.setUserId(userMsgDetail.getUserId());
         return cartParamsDTO;
     }
 
+    /**
+     * 添加物品到购物车
+     * @param cartParamsDTO
+     * @return
+     */
     private Integer addToCart(CartParamsDTO cartParamsDTO) {
         //加入购物车
         Integer flag = this.flag(cartParamsDTO);
@@ -113,13 +167,15 @@ public class CartServiceImpl implements CartService {
         return add;
     }
 
+    /**
+     * 判断入参是否符合添加购物车
+     * @param cartParamsDTO
+     * @return
+     */
     private Integer flag(CartParamsDTO cartParamsDTO) {
         List cartParamsDTOList = new ArrayList();
         if (cartParamsDTO.getProductId() != null && cartParamsDTO.getProductId() != 0) {
             cartParamsDTOList.add(cartParamsDTO.getProductId());
-        }
-        if (StringUtils.isNotEmpty(cartParamsDTO.getName())) {
-            cartParamsDTOList.add(cartParamsDTO.getName());
         }
         if (StringUtils.isNotEmpty(cartParamsDTO.getSize())) {
             cartParamsDTOList.add(cartParamsDTO.getSize());
@@ -127,9 +183,7 @@ public class CartServiceImpl implements CartService {
         if (StringUtils.isNotEmpty(cartParamsDTO.getColor())) {
             cartParamsDTOList.add(cartParamsDTO.getColor());
         }
-        if (cartParamsDTO.getPrice() != null && cartParamsDTO.getPrice() != 0) {
-            cartParamsDTOList.add(cartParamsDTO.getPrice());
-        }
+
         if (cartParamsDTO.getNumber() != null && cartParamsDTO.getNumber() != 0) {
             cartParamsDTOList.add(cartParamsDTO.getNumber());
         }

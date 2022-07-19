@@ -38,7 +38,7 @@ spring:
     host: 8.131.91.253
     port: 6379
     password: dyd.521
-    timeout: 9000ms
+    timeout: 10000ms
     pool:
       # 最大可用连接数（默认为8，负数表示无限）
       max-active: 8
