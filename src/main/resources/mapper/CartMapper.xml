@@ -7,28 +7,31 @@
     <sql id="insertValues">
         (#{userId},#{productId},#{size},#{color},#{number},#{status},#{createTime},#{updateTime},#{createBy},#{updateBy})
     </sql>
-
+    <!--添加数据到购物车-->
     <insert id="add">
         insert into cart_info
         <include refid="words"/>
         values
         <include refid="insertValues"/>
     </insert>
-
+    <!--查询购物车所有数据-->
     <select id="query" resultType="com.optimus.dto.results.CartResultDTO">
         select * from cart_info where status=0
         <if test="productId !=null  and size !=null
         and color !=null and userId !=null">
-            and product_id=#{productId}  and size=#{size}
-            and color=#{color}  and user_id=#{userId}
+            and product_id=#{productId} and size=#{size}
+            and color=#{color} and user_id=#{userId}
         </if>
     </select>
+    <!--查询所有商品-->
     <select id="count" resultType="integer">
         select count(id) from cart_info where status=0 and user_id=#{userId}
     </select>
+    <!--    分页查询购物车-->
     <select id="queryPage" resultType="com.optimus.dto.results.CartResultDTO">
         select * from cart_info where status=0  and user_id=#{cartParamsDTO.userId} limit #{size},#{page};
     </select>
+    <!--更新购物车商品-->
     <update id="update">
         <if test="productId !=null and userId !=null">
             update cart_info set number=number+#{number} WHERE product_id=#{productId} and user_id=#{userId}

@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
     @Override
     public List<ProductResultDTO> queryAll(ProductParamsDTO producParamstDTO) {
-        List<ProductResultDTO> productResultDTOSList = productMapper.queryAll(producParamstDTO);
+        List<ProductResultDTO> productResultDTOSList = productMapper.query(producParamstDTO);
         return null;
     }
 

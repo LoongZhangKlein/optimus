@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.optimus.mapper.ColorMapper">
 
-    <select id="query" resultType="java.lang.String">
+    <select id="query" resultType="com.optimus.dto.results.ProductColorResultDTO">
         <if test="productId !=null">
-            select color from product_color where product_id=#{productId}
+            select * from product_color where product_id=#{productId}
         </if>
     </select>
 </mapper>

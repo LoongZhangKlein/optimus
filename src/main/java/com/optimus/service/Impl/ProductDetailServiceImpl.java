@@ -1,7 +1,11 @@
 package com.optimus.service.Impl;
 
+import com.optimus.dto.params.ProductColorParamsDTO;
 import com.optimus.dto.params.ProductDetailParamsDTO;
+import com.optimus.dto.params.ProductSizeParamsDTO;
+import com.optimus.dto.results.ProductColorResultDTO;
 import com.optimus.dto.results.ProductDetailResultDTO;
+import com.optimus.dto.results.ProductSizeResultDTO;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.exception.GlobalException;
 import com.optimus.mapper.ColorMapper;
@@ -34,8 +38,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         ProductDetailResultDTO productDetailResultDTO = new ProductDetailResultDTO();
 
         // 拿到实体类
-        List<String> sizeList = colorMapper.query(productDetailParamsDTO.getProductId());
-        List<String> colorList = sizeMapper.query(productDetailParamsDTO.getProductId());
+        ProductColorParamsDTO productColorParamsDTO = new ProductColorParamsDTO();
+        productColorParamsDTO.setProductId(productDetailParamsDTO.getProductId());
+        List<ProductColorResultDTO> colorList = colorMapper.query(productColorParamsDTO);
+        ProductSizeParamsDTO productSizeParamsDTO = new ProductSizeParamsDTO();
+        productSizeParamsDTO.setProductId(productDetailParamsDTO.getProductId());
+        List<ProductSizeResultDTO> sizeList = sizeMapper.query(productSizeParamsDTO);
         productDetailResultDTO.setColorList(colorList);
         productDetailResultDTO.setSizeList(sizeList);
         //找到颜色字符串

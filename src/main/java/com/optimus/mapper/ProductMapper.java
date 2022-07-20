@@ -15,7 +15,7 @@ public interface ProductMapper {
      * @param productParamsDTO
      * @return
      */
-    List<ProductResultDTO> queryAll(ProductParamsDTO productParamsDTO);
+    List<ProductResultDTO> query(ProductParamsDTO productParamsDTO);
 
     /**
      * 分页查询商品

@@ -7,7 +7,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 @Data
-public class UserDo implements Serializable {
+public class UserDo {
     private String id;
     private Long userId;
     private String userName;

@@ -1,5 +1,7 @@
 package com.optimus.mapper;
 
+import com.optimus.dto.params.ProductSizeParamsDTO;
+import com.optimus.dto.results.ProductSizeResultDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -7,8 +9,8 @@ import java.util.List;
 public interface SizeMapper {
     /**
      * 查找所有颜色
-     * @param parentId
+     * @param productSizeParamsDTO
      * @return
      */
-    List<String> query(Long parentId);
+    List<ProductSizeResultDTO> query(ProductSizeParamsDTO productSizeParamsDTO);
 }

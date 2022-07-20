@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 @Data
-public class ProductDo implements Serializable {
+public class ProductDo  {
     private Long id;
     private String name;
     private String subtitle;

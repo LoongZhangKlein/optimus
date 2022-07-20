@@ -13,8 +13,8 @@ public class ProductDetailResultDTO {
   private String images;
   private String size;
   private String color;
-  private List<String> sizeList;
-  private List<String> colorList;
+  private List<ProductSizeResultDTO> sizeList;
+  private List<ProductColorResultDTO> colorList;
   private String activity;
   private String service;
   private Integer status;

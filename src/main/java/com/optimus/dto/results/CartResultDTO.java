@@ -1,7 +1,6 @@
 package com.optimus.dto.results;
 
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,8 +11,10 @@ public class CartResultDTO {
   private Long productId;
   private Long userId;
   private String name;
-  private String size;
-  private String color;
+  private Integer size;
+  private String sizeStr;
+  private Integer color;
+  private String colorStr;
   private Double price;
   private Integer number;
   private String images;

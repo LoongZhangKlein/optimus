@@ -2,11 +2,14 @@ package com.optimus.dto.params;
 
 import lombok.Data;
 
-@Data
-public class ProductDetailParamsDTO {
+import java.io.Serializable;
 
-  private long id;
-  private long productId;
+@Data
+public class ProductDetailParamsDTO implements Serializable {
+
+  private static final long serialVersionUID = 4572578411623573943L;
+  private Long id;
+  private Long productId;
   private String title;
   private String images;
   private String size;
@@ -18,7 +21,7 @@ public class ProductDetailParamsDTO {
   private Data updateTime;
   private Integer createBy;
   private Integer updateBy;
-  private double promotionPrice;
+  private Double promotionPrice;
 
   
 

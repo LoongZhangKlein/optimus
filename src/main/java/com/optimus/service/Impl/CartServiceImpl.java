@@ -1,16 +1,16 @@
 package com.optimus.service.Impl;
 
 
-import com.optimus.dto.params.CartParamsDTO;
-import com.optimus.dto.params.PageParamsDTO;
-import com.optimus.dto.params.UserParamsDTO;
-import com.optimus.dto.results.CartResultDTO;
-import com.optimus.dto.results.ProductResultDTO;
-import com.optimus.dto.results.UserResultDTO;
+import com.optimus.dto.params.*;
+import com.optimus.dto.results.*;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.exception.GlobalException;
 import com.optimus.mapper.CartMapper;
+import com.optimus.mapper.ColorMapper;
+import com.optimus.mapper.ProductMapper;
+import com.optimus.mapper.SizeMapper;
 import com.optimus.service.CartService;
+import com.optimus.service.ProductService;
 import com.optimus.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -19,10 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -34,7 +31,12 @@ public class CartServiceImpl implements CartService {
     CartMapper cartMapper;
     @Resource
     RedisUtil redisUtil;
-
+    @Resource
+    ProductMapper productMapper;
+    @Resource
+    ColorMapper colorMapper;
+    @Resource
+    SizeMapper sizeMapper;
     @Override
     public Integer add(Map<String, String> cartMap) {
         if (CollectionUtils.isEmpty(cartMap)) {
@@ -97,7 +99,8 @@ public class CartServiceImpl implements CartService {
         }
         int totalPages=(totalCount  +  pageSize  - 1) / pageSize;
         int offset=(curPage-1)*pageSize;
-        List<CartResultDTO> cartResultDTOS = cartMapper.queryPage(offset, pageSize, cartParamsDTO);
+        //
+        List<CartResultDTO> cartResultDTOS = assembleCart(offset, pageSize, cartParamsDTO);
         pageParamsDTO.setCurPage(pageParamsDTO.getCurPage());
         pageParamsDTO.setList(cartResultDTOS);
         pageParamsDTO.setTotalCount(totalCount);
@@ -120,6 +123,73 @@ public class CartServiceImpl implements CartService {
         return update;
     }
 
+    /**
+     * 组装购物车信息
+     * @param offset
+     * @param pageSize
+     * @param cartParamsDTO
+     * @return
+     */
+    private List<CartResultDTO> assembleCart(Integer offset,Integer pageSize,CartParamsDTO cartParamsDTO){
+        List<CartResultDTO> cartResultDTOS = cartMapper.queryPage(offset, pageSize, cartParamsDTO);
+        Iterator<CartResultDTO> cartResultDTOIterator = cartResultDTOS.iterator();
+        // 获得每个购物车中的商品
+        while (cartResultDTOIterator.hasNext()) {
+            CartResultDTO cartResultDTO = cartResultDTOIterator.next();
+            // 组装
+
+            // 查找每个商品的信息
+            ProductResultDTO productResultDTO = assembleProductMsg(cartResultDTO);
+            // 查找颜色
+            ProductColorResultDTO colorResultDTO = assembleColorMsg(cartResultDTO);
+            //查找 尺寸
+            ProductSizeResultDTO sizeResultDTO = assembleSizeMsg(cartResultDTO);
+            cartResultDTO.setPrice(productResultDTO.getPrice());
+            cartResultDTO.setName(productResultDTO.getName());
+            cartResultDTO.setColorStr(colorResultDTO.getColor());
+            cartResultDTO.setSizeStr(sizeResultDTO.getSize());
+        }
+
+        return cartResultDTOS;
+    }
+
+    /**
+     * 组装商品信息
+     * @param cartResultDTO
+     * @return
+     */
+    private ProductResultDTO assembleProductMsg(CartResultDTO cartResultDTO){
+        // 组装
+        ProductParamsDTO productParamsDTO = new ProductParamsDTO();
+        productParamsDTO.setId(cartResultDTO.getProductId());
+        // 查找每个商品的信息
+        List<ProductResultDTO> productResultDTOList = productMapper.query(productParamsDTO);
+        return productResultDTOList.get(0);
+    }
+    /**
+     * 组装尺寸
+     */
+    private ProductSizeResultDTO assembleSizeMsg(CartResultDTO cartResultDTO){
+        // 组装
+        ProductSizeParamsDTO sizeParamsDTO = new ProductSizeParamsDTO();
+        sizeParamsDTO.setId(cartResultDTO.getSize());
+        List<ProductSizeResultDTO> SizeResultDTOList = sizeMapper.query(sizeParamsDTO);
+        return SizeResultDTOList.get(0);
+    }
+
+    /**
+     * 组装颜色
+     * @param cartResultDTO
+     * @return
+     */
+    private ProductColorResultDTO assembleColorMsg(CartResultDTO cartResultDTO){
+        // 组装
+        ProductColorParamsDTO colorParamsDTO = new ProductColorParamsDTO();
+        colorParamsDTO.setId(cartResultDTO.getColor());
+
+        List<ProductColorResultDTO> colorResultDTOS = colorMapper.query(colorParamsDTO);
+        return colorResultDTOS.get(0);
+    }
     /**
      * 获取用户登录信息
      * @param userMsg

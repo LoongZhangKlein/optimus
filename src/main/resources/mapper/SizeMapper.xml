@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.optimus.mapper.SizeMapper">
 
-    <select id="query" resultType="java.lang.String">
+    <select id="query" resultType="com.optimus.dto.results.ProductSizeResultDTO">
         <if test="productId !=null">
-            select size from product_size where product_id=#{productId}
+            select * from product_size where product_id=#{productId}
         </if>
     </select>
 </mapper>

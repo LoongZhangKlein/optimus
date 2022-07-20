@@ -24,7 +24,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/cart")
 public class CartController{
-    private final String token="token";
     @Resource
     CartService cartService;
     @RequestMapping(value = "/add",method = RequestMethod.POST)
