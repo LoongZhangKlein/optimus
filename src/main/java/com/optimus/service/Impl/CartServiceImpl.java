@@ -162,7 +162,6 @@ public class CartServiceImpl implements CartService {
             //查找 尺寸
             ProductSizeResultDTO sizeResultDTO = assembleSizeMsg(cartResultDTO);
             // 组装cart
-
             cartResultDTO.setImages(productResultDTO.getMainImages());
             cartResultDTO.setPrice(productResultDTO.getPrice());
             cartResultDTO.setName(productResultDTO.getName());
