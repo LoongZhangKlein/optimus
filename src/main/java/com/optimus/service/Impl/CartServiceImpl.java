@@ -99,8 +99,13 @@ public class CartServiceImpl implements CartService {
         }
         int totalPages=(totalCount  +  pageSize  - 1) / pageSize;
         int offset=(curPage-1)*pageSize;
-        //
+        // 组装购物车
         List<CartResultDTO> cartResultDTOS = assembleCart(offset, pageSize, cartParamsDTO);
+        Map<String, Double> price = getPrice(cartResultDTOS);
+        Double sumPrice = price.get("sumPrice");
+        Double sumDisCount = price.get("sumDisCount");
+        pageParamsDTO.setSumPrice(sumPrice);
+        pageParamsDTO.setSumDisCount(sumDisCount);
         pageParamsDTO.setCurPage(pageParamsDTO.getCurPage());
         pageParamsDTO.setList(cartResultDTOS);
         pageParamsDTO.setTotalCount(totalCount);
@@ -122,7 +127,21 @@ public class CartServiceImpl implements CartService {
         Integer update = cartMapper.update(cartParamsDTO);
         return update;
     }
+    private Map<String,Double> getPrice(List<CartResultDTO> cartResultDTOS){
+        Map<String,Double> priceMap=new HashMap<>();
+        Iterator<CartResultDTO> cartResultDTOIterator = cartResultDTOS.iterator();
+        Double sumPrice=0.00;
+        Double disCountPrice=0.00;
+        while (cartResultDTOIterator.hasNext()) {
+            CartResultDTO cartResultDTO = cartResultDTOIterator.next();
+            sumPrice+=cartResultDTO.getPrice()*cartResultDTO.getNumber();
+             disCountPrice+=cartResultDTO.getDisCountPrice()*cartResultDTO.getNumber();
 
+        }
+        priceMap.put("sumPrice",sumPrice);
+        priceMap.put("disCountPrice",disCountPrice);
+        return  priceMap;
+    }
     /**
      * 组装购物车信息
      * @param offset
@@ -136,19 +155,27 @@ public class CartServiceImpl implements CartService {
         // 获得每个购物车中的商品
         while (cartResultDTOIterator.hasNext()) {
             CartResultDTO cartResultDTO = cartResultDTOIterator.next();
-            // 组装
-
             // 查找每个商品的信息
             ProductResultDTO productResultDTO = assembleProductMsg(cartResultDTO);
             // 查找颜色
             ProductColorResultDTO colorResultDTO = assembleColorMsg(cartResultDTO);
             //查找 尺寸
             ProductSizeResultDTO sizeResultDTO = assembleSizeMsg(cartResultDTO);
+            // 组装cart
+
+            cartResultDTO.setImages(productResultDTO.getMainImages());
             cartResultDTO.setPrice(productResultDTO.getPrice());
             cartResultDTO.setName(productResultDTO.getName());
             cartResultDTO.setColorStr(colorResultDTO.getColor());
             cartResultDTO.setSizeStr(sizeResultDTO.getSize());
+            if (productResultDTO.getDiscountPrice()!=null){
+                cartResultDTO.setDisCountPrice(productResultDTO.getDiscountPrice());
+            }else{
+                cartResultDTO.setDisCountPrice(0.00);
+            }
+
         }
+
 
         return cartResultDTOS;
     }

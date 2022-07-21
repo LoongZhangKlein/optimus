@@ -3,8 +3,11 @@
 <mapper namespace="com.optimus.mapper.SizeMapper">
 
     <select id="query" resultType="com.optimus.dto.results.ProductSizeResultDTO">
-        <if test="productId !=null">
+        <if test="productId !=null and id==null">
             select * from product_size where product_id=#{productId}
+        </if>
+        <if test="id!=null">
+            select * from product_size where status=0 and id=#{id}
         </if>
     </select>
 </mapper>

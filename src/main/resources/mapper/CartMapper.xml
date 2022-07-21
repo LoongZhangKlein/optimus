@@ -33,8 +33,18 @@
     </select>
     <!--更新购物车商品-->
     <update id="update">
-        <if test="productId !=null and userId !=null">
-            update cart_info set number=number+#{number} WHERE product_id=#{productId} and user_id=#{userId}
+        <if test="id==null and productId !=null and userId !=null ">
+            update cart_info set number=number+#{number} WHERE product_id=#{productId} and user_id=#{userId} and status=0
+        </if>
+        <if test="id!=null and productId ==null and userId==null">
+            update cart_info set `status`=1 WHERE id=#{id}
+        </if>
+        <if test="id==null and productId ==null and userId ==null">
+            update cart_info set `status`=1
+        </if>
+        <if test="id!=null and productId ==null and userId !=null">
+            update cart_info set number=#{number} WHERE id=#{id} and status=0
         </if>
     </update>
+
 </mapper>

@@ -3,8 +3,11 @@
 <mapper namespace="com.optimus.mapper.ColorMapper">
 
     <select id="query" resultType="com.optimus.dto.results.ProductColorResultDTO">
-        <if test="productId !=null">
-            select * from product_color where product_id=#{productId}
+        <if test="productId !=null and id==null">
+            select * from product_color where status=0 and product_id=#{productId}
+        </if>
+        <if test="id!=null">
+            select * from product_color where status=0 and id=#{id}
         </if>
     </select>
 </mapper>

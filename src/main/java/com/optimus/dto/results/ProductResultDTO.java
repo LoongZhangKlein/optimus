@@ -22,7 +22,7 @@ public class ProductResultDTO implements Serializable {
     private String homepageImages;
     private String homepageSubtitle;
     private Integer isDiscount;
-    private String discountPrice;
+    private Double discountPrice;
     private String discountDescribe;
     private Integer status;
     private Date createTime;

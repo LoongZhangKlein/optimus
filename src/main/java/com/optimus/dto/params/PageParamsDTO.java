@@ -34,8 +34,10 @@ public class PageParamsDTO<T> implements Serializable {
 
     @ApiModelProperty(value = "数据合计")
     private Object dataTotal;
-
-
+    @ApiModelProperty(value = "价格总计")
+    private Double sumPrice;
+    @ApiModelProperty(value = "折扣总计")
+    private Double sumDisCount;
     public PageParamsDTO() {
     }
 

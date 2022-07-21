@@ -15,10 +15,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Map;
 @Slf4j
 @RestController
@@ -45,5 +41,13 @@ public class CartController{
             return R.fail(GlobalEnum.MSG_BLANK);
         }
         return R.creatR(pageParamsResDTO,GlobalEnum.SUCCESS);
+    }
+    @RequestMapping(value = "/update")
+    public R update(CartParamsDTO cartParamsDTO){
+        Integer update = cartService.update(cartParamsDTO);
+        if (cartParamsDTO==null){
+            return R.fail(GlobalEnum.MSG_BLANK);
+        }
+        return R.creatR(update,GlobalEnum.SUCCESS);
     }
 }
