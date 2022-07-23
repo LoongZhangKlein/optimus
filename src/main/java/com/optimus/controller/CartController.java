@@ -42,8 +42,14 @@ public class CartController{
         }
         return R.creatR(pageParamsResDTO,GlobalEnum.SUCCESS);
     }
-    @RequestMapping(value = "/update")
-    public R update(CartParamsDTO cartParamsDTO){
+
+    /**
+     * 清空购物车
+     * @param cartParamsDTO
+     * @return
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    public R update(@RequestBody CartParamsDTO cartParamsDTO){
         Integer update = cartService.update(cartParamsDTO);
         if (cartParamsDTO==null){
             return R.fail(GlobalEnum.MSG_BLANK);
