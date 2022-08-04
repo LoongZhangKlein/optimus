@@ -1,4 +1,4 @@
-package com.optimus.dto.results;
+package com.optimus.entity;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class OrderDetailResultsDTO implements Serializable {
+public class OrderDetailDo implements Serializable {
   private static final long serialVersionUID = 5492390941698795667L;
   private Long id;
   private Integer orderId;

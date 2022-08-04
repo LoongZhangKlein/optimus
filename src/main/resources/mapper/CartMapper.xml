@@ -22,6 +22,10 @@
             and product_id=#{productId} and size=#{size}
             and color=#{color} and user_id=#{userId}
         </if>
+        <if test="id !=null and product==null and size=null and color=null and userId=null">
+            and id=#{id}
+        </if>
+
     </select>
     <!--查询所有商品-->
     <select id="count" resultType="integer">

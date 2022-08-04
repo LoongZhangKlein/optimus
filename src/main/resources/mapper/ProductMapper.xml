@@ -4,24 +4,33 @@
     <select id="query" resultType="com.optimus.dto.results.ProductResultDTO">
 
         <if test="id !=null">
-        select * from product_info where status=0 and id=#{id}
+            select * from product_info where status=0 and id=#{id}
         </if>
 
 
     </select>
     <select id="queryPage" resultType="com.optimus.dto.results.ProductResultDTO">
-        <!--<if test="size!=null and page!=null and categoryId !=null">-->
-            select * from product_info where status=0 and category_id=#{productParamsDTO.categoryId} limit #{size},#{pageSize}
-        <!--</if>-->
+        <if test="size!=null   and productParamsDTO.categoryId!=null and productParamsDTO.label==null">
+            select * from product_info where status=0 and category_id=#{productParamsDTO.categoryId} limit
+            #{size},#{pageSize}
+        </if>
+        <if test="size!=null  and productParamsDTO.categoryId==null and productParamsDTO.label!=null ">
+            select * from product_info where status=0 and label=#{productParamsDTO.label}  limit #{size},#{pageSize}
+        </if>
     </select>
     <select id="count" resultType="integer">
-    <if test="categoryId!=null">
-        select count(id) from product_info where status=0 and category_id=#{categoryId}
-    </if>
+        <if test="categoryId!=null">
+            select count(id) from product_info where status=0 and category_id=#{categoryId}
+        </if>
+        <if test="categoryId==null">
+            select count(id) from product_info where status=0
+        </if>
+
     </select>
     <select id="sort" resultType="com.optimus.dto.results.ProductResultDTO">
         <if test="salesVolume!=null and categoryId!=null">
-        SELECT * FROM `product_info` where category_id=#{categoryId} limit #{size},#{pageSize} ORDER BY sales_volume=#{salesVolume} DESC
+            SELECT * FROM `product_info` where category_id=#{categoryId} limit #{size},#{pageSize} ORDER BY
+            sales_volume=#{salesVolume} DESC
         </if>
     </select>
 

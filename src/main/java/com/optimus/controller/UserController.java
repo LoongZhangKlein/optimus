@@ -28,7 +28,6 @@ public class UserController  {
         if (CollectionUtils.isEmpty(login)) {
             return R.fail();
         }
-
         return R.creatR(login,GlobalEnum.SUCCESS);
 
     }

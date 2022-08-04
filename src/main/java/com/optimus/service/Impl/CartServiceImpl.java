@@ -136,7 +136,6 @@ public class CartServiceImpl implements CartService {
             CartResultDTO cartResultDTO = cartResultDTOIterator.next();
             sumPrice+=cartResultDTO.getPrice()*cartResultDTO.getNumber();
              disCountPrice+=cartResultDTO.getDisCountPrice()*cartResultDTO.getNumber();
-
         }
         priceMap.put("sumPrice",sumPrice);
         priceMap.put("disCountPrice",disCountPrice);

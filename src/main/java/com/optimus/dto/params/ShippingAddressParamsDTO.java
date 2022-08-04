@@ -9,8 +9,11 @@ import java.util.Date;
 @Data
 public class ShippingAddressParamsDTO implements Serializable {
 
+  private static final long serialVersionUID = 5056590789340936838L;
   private Integer id;
   private Integer userId;
+  private String mobile;
+  private String linkman;
   private String address;
   private String addressDetail;
   private Integer defaultAddress;

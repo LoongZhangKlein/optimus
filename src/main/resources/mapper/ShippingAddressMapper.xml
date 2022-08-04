@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.optimus.mapper.ShippingAddressMapper">
+    <sql id="insertWords">
+        (user_id,mobile,linkman,address,address_detail,default_address)
+    </sql>
+    <sql id="insertValues">
+        (#{userId},#{mobile},#{linkman},#{address},#{addressDetail},#{defaultAddress})
+    </sql>
 
+    <insert id="add">
+        insert into shipping_address
+        <include refid="insertWords"/>
+        values
+        <include refid="insertValues"/>
+    </insert>
 
     <select id="query" resultType="com.optimus.dto.results.ShippingAddressResultDTO">
-    <if test="userId !=null">
-        select * from shipping_address where user_id={userId} and status=0
-    </if>
+        <if test="userId !=null and defaultAddress==null">
+            select * from shipping_address where user_id=#{userId} and status=0
+        </if>
+        <if test="userId !=null and defaultAddress!=null">
+            select * from shipping_address where user_id=#{userId} and default_address=#{defaultAddress} and status=0
+        </if>
     </select>
+    <update id="update">
+        UPDATE shipping_address SET mobile=#{mobile},linkman=#{linkman},address=#{address},address_detail=#{addressDetail},default_address=#{defaultAddress}  WHERE id=#{id}
+    </update>
 </mapper>

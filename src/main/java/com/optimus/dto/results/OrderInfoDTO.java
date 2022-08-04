@@ -9,6 +9,7 @@ import java.util.Date;
 @Data
 public class OrderInfoDTO implements Serializable {
 
+  private static final long serialVersionUID = 2299708890524521676L;
   private Long id;
   private Integer orderNumber;
   private Integer userId;

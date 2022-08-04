@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.optimus.mapper.OrderMapper">
+    <sql id="orderWords">
+    (order_number,user_id,store_name,store_id,order_money,pay_money,order_desc,pay_type,order_status,consignee_address,consignee_name,third_pay_number,pay_detail,consignee_detail,`status`,create_time,update_time,create_by,update_by)
+    </sql>
+    <sql id="orderValues">
+       (#{orderNumber},#{userId},#{storeName},#{storeId},#{orderMoney},#{payMoney},#{orderDesc},#{payType},#{orderStatus},#{consigneeAddress},#{consigneeName},#{thirdPayNumber},#{payDetail},#{consigneeDetail},#{consigneeDetail},#{status},#{createTime},#{updateTime},#{createBy},#{updateBy})
+    </sql>
+    <sql id="orderDetailWords">
+        (order_number,product_name,product_id,product_size,product_number,product_orgin_price,product_price,store_name,store_id,create_time,update_time,create_by,update_by,`status`)
+    </sql>
+
+    <sql id="orderDetailValues">
+        (#{orderNumber},#{productName},#{productId},#{productSize},#{productNumber},#{productOrginPrice},#{productPrice},#{storeName},#{storeId},#{createTime},#{updateTime},#{orderNumber},#{createBy},#{updateBy},#{status})
+    </sql>
+
+    <insert id="addOrderInfo">
+        insert into order_info
+        <include refid="orderWords"/>
+        values
+        <include refid="orderValues"/>
+    </insert>
+
+    <insert id="addOrderDetail">
+        insert into order_detail
+        <include refid="orderDetailWords"/>
+        values
+        <include refid="orderDetailValues"/>
+    </insert>
+</mapper>

@@ -15,6 +15,8 @@ public class ProductParamsDTO implements Serializable {
     private Integer isNew;
     private String label;
     private Double price;
+    private Integer size;
+    private Integer color;
     private String detail;
     private String mainImages;
     private Long salesVolume;

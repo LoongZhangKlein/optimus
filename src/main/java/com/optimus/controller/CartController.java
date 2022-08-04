@@ -20,8 +20,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/cart")
 public class CartController{
+
     @Resource
     CartService cartService;
+
+    /**
+     * 添加商品
+     * @param cartMap
+     * @return
+     */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public R add(@RequestBody Map<String,String> cartMap){
         if (CollectionUtils.isEmpty(cartMap)){
@@ -34,8 +41,15 @@ public class CartController{
         return R.creatR(add, GlobalEnum.SUCCESS);
 
     }
+
+    /**
+     * 查询所有购物车信息
+     * @param pageParamsDTO
+     * @param cartParamsDTO
+     * @return
+     */
     @RequestMapping(value = "/queryPage")
-    public R query( PageParamsDTO pageParamsDTO,CartParamsDTO cartParamsDTO){
+    public R query(PageParamsDTO pageParamsDTO,CartParamsDTO cartParamsDTO){
         PageParamsDTO pageParamsResDTO = cartService.queryPage(pageParamsDTO, cartParamsDTO);
         if (pageParamsDTO==null){
             return R.fail(GlobalEnum.MSG_BLANK);

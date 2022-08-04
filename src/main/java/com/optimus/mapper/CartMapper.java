@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 public interface CartMapper {
     /**
+     * insert into order_info (order_number,user_id,store_name,store_id,order_money,pay_money,order_desc,pay_type,order_status,consignee_address,consignee_name,third_pay_number,pay_detail,consignee_detail,`status`) VALUES(1,2,3,4,5,6,7,8,9,10,11,12,13,14,0)
      * 添加数据到购物车
      * @param cartParamsDTO
      * @return
