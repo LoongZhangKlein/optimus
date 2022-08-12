@@ -2,18 +2,20 @@ package com.optimus.entity;
 
 
 import lombok.Data;
+import org.springframework.boot.context.properties.bind.DataObjectPropertyName;
 
 import java.util.Date;
 @Data
 public class OrderInfoDo {
 
   private Long id;
-  private Integer orderNumber;
-  private Integer userId;
+  private Long orderNumber;
+  private Long userId;
   private String storeName;
   private Integer storeId;
-  private String orderMoney;
-  private String payMoney;
+  private Double orderMoney;
+  private Double payMoney;
+  private Integer productNumber;
   private String orderDesc;
   private String payType;
   private String orderStatus;

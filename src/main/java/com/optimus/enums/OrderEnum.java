@@ -4,16 +4,14 @@ public enum OrderEnum {
     WAIT_PAYMENT(0,"待付款"),
     WAIT_SHIPMENT(1,"待付款"),
     WAIT_RECEIVING(2,"待收货"),
-    WAIT_EVALUATE(3,"待评价");
-
+    WAIT_EVALUATE(3,"待评价"),
+    SHIPPING_ADDRESS_LOSS(4,"无收货地址"),
+    UNDERSTOCK(5,"库存不足");
     private Integer code;
-
     private String msg;
-
     public Integer getCode() {
         return code;
     }
-
     public void setCode(Integer code) {
         this.code = code;
     }

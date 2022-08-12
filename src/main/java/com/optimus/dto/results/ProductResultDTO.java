@@ -21,6 +21,7 @@ public class ProductResultDTO implements Serializable {
     private String mainImages;
     private Long salesVolume;
     private String subImages;
+    private Integer cartProductNumber;
     private String homepageImages;
     private String homepageSubtitle;
     private Integer isDiscount;

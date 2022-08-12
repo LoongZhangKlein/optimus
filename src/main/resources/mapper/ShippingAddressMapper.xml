@@ -22,6 +22,9 @@
         <if test="userId !=null and defaultAddress!=null">
             select * from shipping_address where user_id=#{userId} and default_address=#{defaultAddress} and status=0
         </if>
+        <if test="id!=null and userId==null and defaultAddress==null">
+            select * from shipping_address where id=#{id} and status=0
+        </if>
     </select>
     <update id="update">
         UPDATE shipping_address SET mobile=#{mobile},linkman=#{linkman},address=#{address},address_detail=#{addressDetail},default_address=#{defaultAddress}  WHERE id=#{id}

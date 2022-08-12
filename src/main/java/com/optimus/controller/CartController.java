@@ -1,19 +1,14 @@
 package com.optimus.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.page.PageParams;
+
 import com.optimus.commons.R;
 import com.optimus.dto.params.CartParamsDTO;
 import com.optimus.dto.params.PageParamsDTO;
-import com.optimus.dto.results.CartResultDTO;
 import com.optimus.enums.GlobalEnum;
 import com.optimus.service.CartService;
-import com.optimus.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.Map;
 @Slf4j

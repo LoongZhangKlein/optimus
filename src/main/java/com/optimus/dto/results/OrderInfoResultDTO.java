@@ -5,18 +5,20 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class OrderInfoDTO implements Serializable {
+public class OrderInfoResultDTO implements Serializable {
 
   private static final long serialVersionUID = 2299708890524521676L;
   private Long id;
-  private Integer orderNumber;
+  private Long orderNumber;
   private Integer userId;
   private String storeName;
   private Integer storeId;
-  private String orderMoney;
-  private String payMoney;
+  private Double orderMoney;
+  private Double payMoney;
+  private Integer productNumber;
   private String orderDesc;
   private String payType;
   private String orderStatus;
@@ -30,6 +32,7 @@ public class OrderInfoDTO implements Serializable {
   private Date updateTime;
   private Integer createBy;
   private Integer updateBy;
+  private List<OrderDetailResultsDTO> orderDetailList;
 
 
 

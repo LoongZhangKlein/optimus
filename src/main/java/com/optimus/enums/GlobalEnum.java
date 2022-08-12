@@ -10,8 +10,8 @@ public enum GlobalEnum {
     MSG_BLANK("000","返回为空"),
     MSG_NOT_FULL("001","信息不全"),
     NOT_LOG_IN("002","未登录"),
+    USER_EXISTS("003","用户已存在"),
     SUCCESS("200","请求成功"),
-
     LOGIN_ERROR("401","登录失败"),
     TOKEN_FAILURE("402","token无效"),
     TOKEN_MISS("403","token不存在"),

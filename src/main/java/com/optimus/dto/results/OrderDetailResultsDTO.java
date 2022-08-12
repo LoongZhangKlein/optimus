@@ -10,7 +10,7 @@ public class OrderDetailResultsDTO implements Serializable {
   private static final long serialVersionUID = 5492390941698795667L;
   private Long id;
   private Integer orderId;
-  private Integer orderNumber;
+  private Long orderNumber;
   private String storeName;
   private Integer productNumber;
   private Double productPrice;

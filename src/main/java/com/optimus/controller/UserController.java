@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServlet;
 import java.util.List;
 import java.util.Map;
+/**
+ * @author DragonZhang
+ */
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -22,14 +25,20 @@ public class UserController  {
     @Resource
     RedisUtil redisUtil;
 
+    /**
+     * 登录
+     * @param userParamsDTO
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public R login(@RequestBody UserParamsDTO userParamsDTO) {
+        // 调用service层登录接口
         Map<String, Object> login = userService.login(userParamsDTO);
+        // 判断返回信息是否为空 为空
         if (CollectionUtils.isEmpty(login)) {
             return R.fail();
         }
         return R.creatR(login,GlobalEnum.SUCCESS);
-
     }
 
     @RequestMapping("/paging")

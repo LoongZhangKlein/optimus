@@ -2,6 +2,7 @@ package com.optimus.exception;
 
 
 import com.optimus.enums.GlobalEnum;
+import com.optimus.enums.OrderEnum;
 
 /**
  * 全局异常
@@ -18,6 +19,10 @@ public class GlobalException extends RuntimeException {
 	public GlobalException(GlobalEnum globalEnum){
 		this(globalEnum.getCode(),globalEnum.getMsg());
 	}
+	public GlobalException(OrderEnum orderEnum){
+		this(String.valueOf(orderEnum.getCode()),orderEnum.getMsg());
+	}
+
 
 
 }
